@@ -6,7 +6,7 @@
 /*   By: tnicolau <tnicolau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 10:14:35 by tnicolau          #+#    #+#             */
-/*   Updated: 2023/12/05 14:37:29 by tnicolau         ###   ########.fr       */
+/*   Updated: 2023/12/08 15:00:16 by tnicolau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,42 +22,69 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-void	*ft_calloc(int nmemb, int size)
+char	*ft_calloc(int nmemb, int size)
 {
-	void	*res;
+	char	*res;
 
+	if (!nmemb || !size)
+		return (NULL);
 	res = malloc(nmemb * size);
 	if (!res)
 		return (NULL);
-	ft_bzero(res, nmemb * size);
+	ft_bzero(res, size);
 	return (res);
 }
 
-void	ft_bzero(void *s, int n)
+void	ft_bzero(char *s, int n)
 {
-	unsigned char	*str;
+	char	*str;
 	int			i;
 
-	str = (unsigned char *)s;
-	i = 0;
-	while (i < n)
+	if (s)
 	{
-		str[i] = 0;
-		i++;
+		str = (char *)s;
+		i = 0;
+		while (i < n)
+		{
+			str[i] = 0;
+			i++;
+	}
 	}
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+int	ft_strncmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+char	*ft_strjoin(char *s1, char *s2, int buffer_length)
 {
 	char	*str;
 	int		i;
 	int		j;
 	int		size;
 
+	// printf("join\n");
 	i = 0;
 	j = 0;
-	size = ft_strlen(s1) + ft_strlen(s2);
-	str = ft_calloc(sizeof(char), (size));
+	if ((ft_strlen(s1) == ft_strlen(s2)) && buffer_length > 1)
+		return (s1);
+	if (s1)
+		size = ft_strlen(s1) + ft_strlen(s2);
+	else
+		size = ft_strlen(s2);
+	str = ft_calloc(sizeof(char), (size + 1));
 	if (!str)
 		return (NULL);
 	while (s1[i])
@@ -73,34 +100,14 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	// printf("size: %d\n", size);
 	str[i] = '\0';
+	// free(s2);
 	free(s1);
 	return (str);
 }
 
-// char	*ft_strdup(char *s, char *f)
-// {
-// 	char	*str;
-// 	int		i;
-// 	int		size;
-
-// 	size = ft_strlen(s);
-// 	i = 0;
-// 	str = calloc(sizeof(char), (size + 1));
-// 	if (!str)
-// 		return (error_management(f));
-// 	while (i < (size + 1))
-// 	{
-// 		str[i] = s[i];
-// 		i++;
-// 	}
-// 	free(f);
-// 	str[i] = '\0';
-// 	return (str);
-// }
-
-char	*error_management(char *str1)
+char	*error_management(char *str)
 {
-	free(str1);
+	free(str);
 	return (NULL);
 }
 
@@ -114,10 +121,10 @@ char	*ft_substr(char *s, int start, int len)
 	if (!s)
 		return (NULL);
 	length = ft_strlen(s);
-	// if (length < start)
-	// 	return (ft_strdup("", s));
 	if (start + len > length)
 		len = length - start;
+	if (!len)
+		return (NULL);
 	str = ft_calloc(sizeof(char), (len + 1));
 	if (!str)
 		return (NULL);
