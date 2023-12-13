@@ -6,7 +6,7 @@
 /*   By: tnicolau <tnicolau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 09:59:41 by tnicolau          #+#    #+#             */
-/*   Updated: 2023/12/13 14:33:03 by tnicolau         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:55:42 by tnicolau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,3 +120,24 @@ char	*get_next_line(int fd)
 	free(temp);
 	return (line);
 }
+// #include <stdio.h>
+// #include <fcntl.h>
+
+// int	main(void)
+// {
+// 	int	num;
+// 	int	i = 0;
+// 	char	*result;
+
+// 	num = open("tests/bible.txt", O_RDONLY);
+// 	// if (num <= 0)
+// 	// 	close(num);
+// 	while (i < 110000)
+// 	{
+// 		result = get_next_line(num);
+// 		printf("result : %s", result);
+// 		free(result);
+// 		i++;
+// 	}
+// 	close(num);
+// }
