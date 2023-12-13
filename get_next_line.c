@@ -6,11 +6,17 @@
 /*   By: tnicolau <tnicolau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 09:59:41 by tnicolau          #+#    #+#             */
-/*   Updated: 2023/12/13 08:56:17 by tnicolau         ###   ########.fr       */
+/*   Updated: 2023/12/13 13:14:40 by tnicolau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*error_management(char *str)
+{
+	free(str);
+	return (NULL);
+}
 
 char	*extract_line(char	*temp)
 {
@@ -24,7 +30,7 @@ char	*extract_line(char	*temp)
 		i++;
 	if (temp[i] == '\n')
 		i++;
-	str = ft_calloc(sizeof(char), (i + 1));
+	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (NULL);
 	i = -1;
@@ -50,13 +56,10 @@ char	*update_temp(char *temp)
 	while (temp[i] && temp[i] != '\n')
 		i++;
 	if (!temp[i])
-	{
-		free(temp);
-		return (NULL);
-	}
-	str = ft_calloc(sizeof(char), ((ft_strlen(temp) - i) + 1));
+		return (error_management(temp));
+	str = malloc(sizeof(char) * ((ft_strlen(temp) - i) + 1));
 	if (!str)
-		return (NULL);
+		return (error_management(temp));
 	i++;
 	while (temp[i])
 		str[j++] = temp[i++];
@@ -71,9 +74,9 @@ char	*store_buffer(int fd, char *temp)
 	int		buffer_result;
 
 	buffer_result = 1;
-	buffer = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
-		return (NULL);
+		return (error_management(temp));
 	while (!ft_strchr(temp, '\n') && buffer_result)
 	{
 		buffer_result = read(fd, buffer, BUFFER_SIZE);
@@ -115,21 +118,25 @@ char	*get_next_line(int fd)
 	free(temp);
 	return (line);
 }
-// int	main(void)
-// {
-// 	int	num;
-// 	int	i = 0;
-// 	char	*result;
 
-// 	num = open("alternate_line_nl_no_nl", O_RDONLY);
-// 	// if (num <= 0)
-// 	// 	close(num);
-// 	while (i < 15)
-// 	{
-// 		result = get_next_line(num);
-// 		printf("result : %s", result);
-// 		free(result);
-// 		i++;
-// 	}
-// 	close(num);
-// }
+#include <stdio.h>
+#include <fcntl.h>
+
+int	main(void)
+{
+	int	num;
+	int	i = 0;
+	char	*result;
+
+	num = open("tests/bible.txt", O_RDONLY);
+	// if (num <= 0)
+	// 	close(num);
+	while (i < 110000)
+	{
+		result = get_next_line(num);
+		printf("result : %s", result);
+		free(result);
+		i++;
+	}
+	close(num);
+}

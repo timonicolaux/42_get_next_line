@@ -6,7 +6,7 @@
 /*   By: tnicolau <tnicolau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 10:14:35 by tnicolau          #+#    #+#             */
-/*   Updated: 2023/12/13 08:58:35 by tnicolau         ###   ########.fr       */
+/*   Updated: 2023/12/13 12:47:30 by tnicolau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,6 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_calloc(int nmemb, int size)
-{
-	char	*res;
-	int		i;
-
-	i = 0;
-	if (!nmemb || size < 0)
-		return (NULL);
-	res = malloc(nmemb * size);
-	if (!res)
-		return (NULL);
-	while (i < size)
-	{
-		res[i] = 0;
-		i++;
-	}
-	return (res);
-}
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char		*str;
@@ -53,13 +34,13 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	if (!s1)
-		s1 = ft_calloc(sizeof(char), 1);
+		s1 = malloc(sizeof(char) * 1);
 	if (!s1 || !s2)
-		return (NULL);
+		return (error_management(s1));
 	size = ft_strlen(s1) + ft_strlen(s2);
-	str = ft_calloc(sizeof(char), (size + 1));
+	str = malloc(sizeof(char) * (size + 1));
 	if (!str)
-		return (NULL);
+		return (error_management(s1));
 	while (s1[i])
 	{
 		str[i] = s1[i];
@@ -137,5 +118,3 @@ char	*ft_strdup(char *s)
 	str[i] = '\0';
 	return (str);
 }
-
-
