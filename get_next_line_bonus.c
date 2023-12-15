@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tnicolau <tnicolau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/30 09:59:41 by tnicolau          #+#    #+#             */
-/*   Updated: 2023/12/15 14:11:20 by tnicolau         ###   ########.fr       */
+/*   Created: 2023/12/15 13:46:04 by tnicolau          #+#    #+#             */
+/*   Updated: 2023/12/15 14:06:32 by tnicolau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*error_management(char *str)
 {
@@ -98,25 +98,25 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*temp;
 	int			i;
-	static char	store[BUFFER_SIZE + 1];
+	static char	store[1024][BUFFER_SIZE + 1];
 
 	i = 0;
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 1023)
 		return (NULL);
-	temp = ft_strdup(store);
+	temp = ft_strdup(store[fd]);
 	if (!temp)
 		return (NULL);
 	while (i < (BUFFER_SIZE + 1))
-		store[i++] = '\0';
+		store[fd][i++] = '\0';
 	temp = store_buffer(fd, temp);
 	if (!temp)
 		return (NULL);
 	line = extract_line(temp);
 	temp = update_temp(temp);
 	if (ft_strlen(temp))
-		ft_memmove(store, temp, ft_strlen(temp));
+		ft_memmove(store[fd], temp, ft_strlen(temp));
 	else
-		store[0] = '\0';
+		store[fd][0] = '\0';
 	free(temp);
 	return (line);
 }
